@@ -31,7 +31,7 @@ function LIFxPlatform(log, config){
     lifx_remote = new lifxRemoteObj(config["access_token"]);
 
     // use remote or lan api ?
-    use_lan = platformConfig["use_lan"] || false;
+    use_lan = config["use_lan"] || false;
 
     if (use_lan != false) {
         lifxLanObj = require('lifx');
