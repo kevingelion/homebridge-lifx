@@ -8,6 +8,7 @@
 //         "platform": "LIFx",             // required
 //         "name": "LIFx",                 // required
 //         "access_token": "access token", // required
+//         "duration": 0.2                 // required - number of seconds to fade changes
 //         "use_lan": "true"               // optional set to "true" (gets and sets over the lan) or "get" (gets only over the lan)
 //     }
 // ],
@@ -16,21 +17,21 @@
 // The default code for all HomeBridge accessories is 031-45-154.
 //
 
-var lifxRemoteObj = require('lifx-api');
-var lifx_remote;
-
-var lifxLanObj;
-var lifx_lan;
-var use_lan;
+var lifxRemoteObj = require('lifx-api'),
+    lifx_remote,
+    config,
+    lifxLanObj,
+    lifx_lan,
+    use_lan;
 
 function LIFxPlatform(log, config){
     // auth info
-    this.access_token = config["access_token"];
+    config = config;
 
-    lifx_remote = new lifxRemoteObj(this.access_token);
+    lifx_remote = new lifxRemoteObj(config["access_token"]);
 
     // use remote or lan api ?
-    use_lan = config["use_lan"] || false;
+    use_lan = platformConfig["use_lan"] || false;
 
     if (use_lan != false) {
         lifxLanObj = require('lifx');
@@ -202,7 +203,7 @@ LIFxBulbAccessory.prototype = {
                 break;
         }
 
-        lifx_remote.setColor("id:"+ this.deviceId, color, 0, null, function (body) {
+        lifx_remote.setColor("id:"+ this.deviceId, color, config["duration"], null, function (body) {
             callback();
         });
     },
@@ -210,7 +211,7 @@ LIFxBulbAccessory.prototype = {
         var that = this;
 
         this.log("Setting remote power: " + state);
-        lifx_remote.setPower("id:"+ that.deviceId, (state == 1 ? "on" : "off"), 0, function (body) {
+        lifx_remote.setPower("id:"+ that.deviceId, (state == 1 ? "on" : "off"), config["duration"], function (body) {
             callback();
         });
     },
