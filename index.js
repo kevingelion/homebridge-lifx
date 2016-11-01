@@ -203,7 +203,7 @@ LIFxBulbAccessory.prototype = {
                 break;
         }
 
-        lifx_remote.setColor("id:"+ this.deviceId, color, config["duration"], null, function (body) {
+        lifx_remote.setColor("id:"+ this.deviceId, color, 0, null, function (body) {
             callback();
         });
     },
@@ -211,7 +211,7 @@ LIFxBulbAccessory.prototype = {
         var that = this;
 
         this.log("Setting remote power: " + state);
-        lifx_remote.setPower("id:"+ that.deviceId, (state == 1 ? "on" : "off"), config["duration"], function (body) {
+        lifx_remote.setPower("id:"+ that.deviceId, (state == 1 ? "on" : "off"), 0, function (body) {
             callback();
         });
     },
