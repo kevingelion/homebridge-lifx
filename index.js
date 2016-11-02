@@ -93,6 +93,8 @@ function LIFxBulbAccessory(log, bulb) {
 
 LIFxBulbAccessory.prototype = {
     getLan: function(type, callback){
+        console.log("getLan() called for " + type);
+
         if (!lifx_lan.bulbs[this.deviceId]) {
             callback(new Error("Device not found"), false);
             return;
