@@ -73,28 +73,26 @@ function LIFxBulbAccessory(log, bulb) {
         var that = this;
         this.bulb = lifx_lan.bulbs[this.deviceId];
 
-        lifx_lan.on('bulbstate', function(bulb) {
-            if (bulb.addr.toString('hex') == that.deviceId) {
-                that.bulb = bulb;
-
-                if (that.service) {
-                    that.service.getCharacteristic(Characteristic.On).setValue(that.bulb.state.power > 0);
-                    that.service.getCharacteristic(Characteristic.Brightness).setValue(Math.round(that.bulb.state.brightness * 100 / 65535));
-
-                    if (that.capabilities.has_color == true) {
-                        that.service.getCharacteristic(Characteristic.Hue).setValue(Math.round(that.bulb.state.hue * 360 / 65535));
-                        that.service.getCharacteristic(Characteristic.Saturation).setValue(Math.round(that.bulb.state.saturation * 100 / 65535));
-                    }
-                }
-            }
-        });
+        // lifx_lan.on('bulbstate', function(bulb) {
+        //     if (bulb.addr.toString('hex') == that.deviceId) {
+        //         that.bulb = bulb;
+        // 
+        //         if (that.service) {
+        //             that.service.getCharacteristic(Characteristic.On).setValue(that.bulb.state.power > 0);
+        //             that.service.getCharacteristic(Characteristic.Brightness).setValue(Math.round(that.bulb.state.brightness * 100 / 65535));
+        // 
+        //             if (that.capabilities.has_color == true) {
+        //                 that.service.getCharacteristic(Characteristic.Hue).setValue(Math.round(that.bulb.state.hue * 360 / 65535));
+        //                 that.service.getCharacteristic(Characteristic.Saturation).setValue(Math.round(that.bulb.state.saturation * 100 / 65535));
+        //             }
+        //         }
+        //     }
+        // });
     }
 }
 
 LIFxBulbAccessory.prototype = {
     getLan: function(type, callback){
-        console.log("getLan() called for " + type);
-
         if (!lifx_lan.bulbs[this.deviceId]) {
             callback(new Error("Device not found"), false);
             return;
