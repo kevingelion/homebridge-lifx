@@ -8,6 +8,7 @@
 //         "platform": "LIFx",             // required
 //         "name": "LIFx",                 // required
 //         "access_token": "access token", // required
+//         "duration": integer             // required number of milliseconds to fade color and power changes
 //         "use_lan": "true"               // optional set to "true" (gets and sets over the lan) or "get" (gets only over the lan)
 //     }
 // ],
@@ -22,10 +23,12 @@ var lifx_remote;
 var lifxLanObj;
 var lifx_lan;
 var use_lan;
+var duration;
 
 function LIFxPlatform(log, config){
     // auth info
     this.access_token = config["access_token"];
+    duration = config["duration"] / 1000;
 
     lifx_remote = new lifxRemoteObj(this.access_token);
 
@@ -202,7 +205,7 @@ LIFxBulbAccessory.prototype = {
                 break;
         }
 
-        lifx_remote.setColor("id:"+ this.deviceId, color, 0, null, function (body) {
+        lifx_remote.setColor("id:"+ this.deviceId, color, duration, null, function (body) {
             callback();
         });
     },
@@ -210,7 +213,7 @@ LIFxBulbAccessory.prototype = {
         var that = this;
 
         this.log("Setting remote power: " + state);
-        lifx_remote.setPower("id:"+ that.deviceId, (state == 1 ? "on" : "off"), 0, function (body) {
+        lifx_remote.setPower("id:"+ that.deviceId, (state == 1 ? "on" : "off"), duration, function (body) {
             callback();
         });
     },
